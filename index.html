@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEADMAGNET CRM</title>
+    <style>
+     body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url('Get5.jpg');
+        }
+
+        header {
+            background-color: #333333;
+            color: #e82e2e;
+            padding: 45px;
+            text-align: center;
+            background-image: url('lead3.png'); 
+            background-size: cover;
+            background-position: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-image: url('pho.jpg');
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: auto;
+        }
+
+        label {
+            margin-bottom: 8px;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1> .</h1>
+    </header>
+
+    <main>
+        <!-- Login Form -->
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="button" onclick="login()">Login</button>
+        </form>
+
+        <!-- Member Task Detail Section -->
+        <div id="memberSection" style="display: none;">
+            <h2>Welcome, <span id="memberName"></span>!</h2>
+            <h3>Your Tasks:</h3>
+            <ul id="taskList"></ul>
+        </div>
+    </main>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === 'admin') {
+                // Redirect to the admin dashboard
+                window.location.href = 'admin_dashboard.html';
+            } else if (username === 'member' && password === 'member') {
+                // Simulate storing member details in localStorage
+                window.location.href = 'member_dashboard.html';
+
+                // Show member section
+                showMemberSection(username);
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+       
+            
+    </script>
+
+</body>
+</html>
