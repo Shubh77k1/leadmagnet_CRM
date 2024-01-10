@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard - Leadmagnet CRM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url('Get4.jpg');
+        }
+
+        header {
+            background-color: #622c2c;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            background-image: url('pho.jpg')
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-image: url('high.jpg');
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            padding: 8px;
+            margin-bottom: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .form-pair {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .form-pair label,
+        .form-pair input,
+        .form-pair select {
+            width: 48%; /* Adjust the width as needed */
+        }
+        button {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #submittedMessage {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Member Dashboard - Leadmagnet CRM </h1>
+    </header>
+
+    <main>
+        <!-- Member Update Status Section -->
+       <form id="updateStatusForm">
+            <div class="form-pair">
+                <label for="memberId">ID:</label>
+                <input type="text" id="memberId" name="memberId" placeholder="Enter ID" required>
+            </div>
+
+            <div class="form-pair">
+                <label for="memberName">Member Name:</label>
+                <input type="text" id="memberName" name="memberName" placeholder="Enter Member Name" required>
+            </div>
+
+            <div class="form-pair">
+                <label for="workDetails">Work Details:</label>
+                <input type="text" id="workDetails" name="workDetails" placeholder="Enter work details">
+            </div>
+
+            <div class="form-pair">
+                <label for="workStatus">Work Status:</label>
+                <select id="workStatus" name="workStatus" required>
+                    <option value="inProgress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="form-pair">
+                <label for="dueDate">Due Date:</label>
+                <input type="date" id="dueDate" name="dueDate">
+            </div>
+
+            <div class="form-pair">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" placeholder="Enter location" required>
+            </div>
+
+            <div class="form-pair">
+                <label for="link">Link:</label>
+                <input type="text" id="link" name="link" placeholder="Enter link">
+            </div>
+
+            <button type="button" onclick="updateStatus()">Submit</button>
+        </form>
+    </main>
+
+    <div id="submittedMessage">Submitted</div>
+
+    <script>
+        function updateStatus() {
+            const memberId = document.getElementById('memberId').value;
+            const memberName = document.getElementById('memberName').value;
+            const workDetails = document.getElementById('workDetails').value;
+            const workStatus = document.getElementById('workStatus').value;
+            const dueDate = document.getElementById('dueDate').value;
+            const location = document.getElementById('location').value;
+            const link = document.getElementById('link').value;
+
+            // Save data to local storage
+            const newData = {
+                memberId,
+                memberName,
+                workDetails,
+                workStatus,
+                dueDate,
+                location,
+                link
+            };
+
+            // Retrieve existing data or initialize an empty array
+            const existingData = JSON.parse(localStorage.getItem('memberData')) || [];
+
+            // Add new data to the array
+            existingData.push(newData);
+
+            // Save the updated array back to local storage
+            localStorage.setItem('memberData', JSON.stringify(existingData));
+
+            // Show submitted message
+            const submittedMessage = document.getElementById('submittedMessage');
+            submittedMessage.style.display = 'block';
+
+            // Hide message after 2 seconds
+            setTimeout(() => {
+                submittedMessage.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>

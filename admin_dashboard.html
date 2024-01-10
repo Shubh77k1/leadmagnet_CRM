@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Leadmagnet CRM</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url('pex.jpg');
+            display: flex;
+            height: 100vh;
+        }
+
+        aside {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            width: 200px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #397c5c;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            width: calc(100% - 200px);
+            background-image: url('pex.jpg')
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-image: url('Get5.jpg');
+            width: calc(250% - 350px);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        select {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #2e0707;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        /* Add a new class for the delete button */
+        .deleteButton {
+            background-color: #ff4d4d;
+        }
+
+        .deleteButton:hover {
+            background-color: #ff6666;
+        }
+
+        #paymentPage {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #paymentForm {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        #paymentForm label {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        #paymentForm input {
+            padding: 8px;
+            margin-bottom: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #paymentForm button {
+            margin-top: 10px;
+        }
+       #detailsSection {
+            display: none;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <h3>Menu</h3>
+        <button onclick="showHome()">Home</button>
+        <button onclick="showTaskProgress()">Task Progress</button>
+        <button onclick="showSubmittedMessages()">Submitted Messages</button>
+        <button onclick="showPaymentPage()">Payment</button>
+    </aside>
+
+    <header>
+        <h1>Admin Dashboard - Leadmagnet CRM </h1>
+    </header>
+
+    <main id="mainContent">
+        <!-- Content dynamically loaded based on menu selection -->
+    </main>
+<main id="mainContent">
+        <!-- Content dynamically loaded based on menu selection -->
+        <div id="detailsSection">
+            <h2>Submitted Message Details</h2>
+            <div id="detailsContent"></div>
+        </div>
+    </main>
+
+    
+    <div id="submittedMessageList"></div>
+
+    <button onclick="openPaymentPage()">Payment</button>
+
+
+<script>
+    function openPaymentPage() {
+            // Open the payment page in a new window
+            window.open('payment.html', '_blank', 'width=1920,height=1080');
+        }
+    function showHome() {
+        const mainContent = document.getElementById('mainContent');
+        mainContent.innerHTML = '<h2>Welcome to the Admin Dashboard</h2>';
+    }
+
+    function showTaskProgress() {
+        const mainContent = document.getElementById('mainContent');
+        mainContent.innerHTML = '<h2>Task Progress Section</h2><ul id="taskProgressList"></ul>';
+    }
+
+    function showSubmittedMessages() {
+        const mainContent = document.getElementById('mainContent');
+        mainContent.innerHTML = '<h2>Submitted Messages Section</h2><ul id="submittedMessageList"></ul>';
+
+        displaySubmittedMessages();
+    }
+
+    function showPaymentPage() {
+        const paymentPage = document.getElementById('paymentPage');
+        paymentPage.style.display = 'flex';
+
+        const mainContent = document.getElementById('mainContent');
+        mainContent.innerHTML = '';
+    }
+
+    function displaySubmittedMessages() {
+        const submittedMessageList = document.getElementById('submittedMessageList');
+        submittedMessageList.innerHTML = '';
+
+        const memberData = getMemberData();
+
+        memberData.forEach((data, index) => {
+            const li = document.createElement('li');
+            li.textContent = `Member: ${data.memberName}, Message: Submitted`;
+            // Add a details button with a click event to show details
+                const detailsButton = document.createElement('button');
+                detailsButton.textContent = 'Details';
+                detailsButton.onclick = () => showDetails(data);
+                li.appendChild(detailsButton);
+
+            // Add a delete button with a click event to remove the submitted message
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.className = 'deleteButton';
+            deleteButton.onclick = () => deleteSubmittedMessage(index);
+            li.appendChild(deleteButton);
+
+            submittedMessageList.appendChild(li);
+        });
+    }
+
+    function deleteSubmittedMessage(index) {
+        const memberData = getMemberData();
+
+        // Remove the entry at the specified index
+        memberData.splice(index, 1);
+
+        // Save the updated array back to local storage
+        localStorage.setItem('memberData', JSON.stringify(memberData));
+
+        // Display the updated submitted messages
+        displaySubmittedMessages();
+    }
+
+    function processPayment() {
+        const amount = document.getElementById('amount').value;
+        const paymentMethod = document.getElementById('paymentMethod').value;
+
+        // Process the payment (replace with actual payment processing logic)
+
+        alert(`Payment processed successfully!\nAmount: ${amount}\nPayment Method: ${paymentMethod}`);
+
+        // Clear the form after processing payment
+        document.getElementById('amount').value = '';
+        document.getElementById('paymentMethod').value = 'creditCard';
+    }
+
+    // Function to retrieve member data from local storage
+    function getMemberData() {
+        return JSON.parse(localStorage.getItem('memberData')) || [];
+    }
+
+    // Function to display member data on the admin dashboard
+    function displayMemberData() {
+        const submittedMessageList = document.getElementById('submittedMessageList');
+        submittedMessageList.innerHTML = '';
+
+        const memberData = getMemberData();
+
+        memberData.forEach((data, index) => {
+            const li = document.createElement('li');
+            li.textContent = `Member: ${data.memberName}, Message: Submitted`;
+
+            // Add a delete button with a click event to remove the submitted message
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.className = 'deleteButton';
+            deleteButton.onclick = () => deleteSubmittedMessage(index);
+            li.appendChild(deleteButton);
+
+            submittedMessageList.appendChild(li);
+        });
+    }
+function showDetails(data) {
+            // Display detailed information in the details section
+            const detailsContent = document.getElementById('detailsContent');
+            detailsContent.innerHTML = `
+                <p><strong>Member ID:</strong> ${data.memberId}</p>
+                <p><strong>Member Name:</strong> ${data.memberName}</p>
+                <p><strong>Work Details:</strong> ${data.workDetails}</p>
+                <p><strong>Work Status:</strong> ${data.workStatus}</p>
+                <p><strong>Location:</strong> ${data.location}</p>
+                <p><strong>Link:</strong> ${data.link}</p>
+            `;
+
+            // Show the details section
+            const detailsSection = document.getElementById('detailsSection');
+            detailsSection.style.display = 'block';
+        }
+    // Call the function to display submitted messages when the admin dashboard loads
+    displaySubmittedMessages();
+
+    // Simulated task data with additional details
+    const tasks = [
+        {
+            member: 'member1',
+            taskName: 'Task 1',
+            status: 'inProgress',
+            location: 'Location 1',
+            link: 'Link 1',
+            workStatus: 'In Progress',
+            assignedBy: 'Admin'
+        },
+        {
+            member: 'member2',
+            taskName: 'Task 2',
+            status: 'completed',
+            location: 'Location 2',
+            link: 'Link 2',
+            workStatus: 'Completed',
+            assignedBy: 'Admin'
+        },
+        // Add more tasks as needed
+    ];
+
+    // Display task progress on admin dashboard
+    const taskProgressList = document.getElementById('taskProgressList');
+    const memberUpdatesList = document.getElementById('memberUpdatesList');
+    const mainContent = document.getElementById('mainContent');
+
+    tasks.forEach(task => {
+        const li = document.createElement('li');
+        const statusSelect = document.createElement('select');
+        statusSelect.innerHTML = `
+            <option value="inProgress" ${task.status === 'inProgress' ? 'selected' : ''}>In Progress</option>
+            <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>Completed</option>
+        `;
+        const updateButton = document.createElement('button');
+        updateButton.textContent = 'Update Status';
+        updateButton.onclick = () => updateStatus(task);
+
+        li.innerHTML = `<span>${task.member}: ${task.taskName}</span>
+                        <span>Location: ${task.location}</span>
+                        <span>Link: ${task.link}</span>
+                        <span>Work Status: ${task.workStatus}</span>
+                        <span>Assigned By: ${task.assignedBy}</span>`;
+        li.appendChild(statusSelect);
+        li.appendChild(updateButton);
+
+        taskProgressList.appendChild(li);
+    });
+
+    function updateStatus(task) {
+        const newStatus = taskProgressList.querySelector(`li:contains('${task.member}: ${task.taskName}') select`).value;
+
+        // Simulate updating task status (replace with actual server-side logic)
+        alert(`Task "${task.taskName}" status updated to ${newStatus}`);
+
+        // Display the update in the Member Updates section
+        const updateLi = document.createElement('li');
+        updateLi.textContent = `${task.member}: ${task.taskName} - Status updated to ${newStatus}`;
+        memberUpdatesList.appendChild(updateLi);
+    }
+</script>
+
+</body>
+</html>
